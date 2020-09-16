@@ -74,3 +74,8 @@ crumb :personality_insight do |screen_name|
   link t('personality_insights.show.crumb_title'), personality_insight_path(screen_name: screen_name, via: current_via("breadcrumb_personality_insight"))
   parent :timeline, screen_name
 end
+
+crumb :secret_account do |screen_name|
+  link t('secret_accounts.show.crumb_title'), secret_account_path(screen_name: screen_name, via: current_via("breadcrumb_secret_account"))
+  parent :timeline, screen_name
+end

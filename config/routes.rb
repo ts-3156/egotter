@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       get "follower_insights/profiles_count", to: "follower_insights#profiles_count"
       get "follower_insights/locations_count", to: "follower_insights#locations_count"
       get "follower_insights/tweet_times", to: "follower_insights#tweet_times"
+      get "secret_accounts", to: "secret_accounts#show"
 
       get "summary/summary", to: "summary#summary"
       get 'account_statuses', to: 'account_statuses#show'
@@ -78,6 +79,8 @@ Rails.application.routes.draw do
   ).each do |controller_name|
     resources controller_name, only: %i(show), param: :screen_name
   end
+
+  resources 'secret_accounts', only: %i(show), param: :screen_name
 
   get 'profiles/:screen_name/latest', to: redirect("/profiles/%{screen_name}")
 

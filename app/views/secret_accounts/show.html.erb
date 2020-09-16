@@ -1,0 +1,51 @@
+<% content_for :canonical_url do %>
+  <link href="<%= secret_account_url(@twitter_user) %>" rel="canonical">
+<% end %>
+
+<%= content_for :navbar_title, t('.navbar_title') %>
+
+<% breadcrumb :secret_account, @twitter_user.screen_name %>
+<% title t('.meta_title', user: @twitter_user.screen_name) %>
+<% set_meta_tags description: t('.meta_description', user: @twitter_user.screen_name) %>
+
+<%= render(partial: 'adsense/ad', locals: {vertical: :top}) %>
+
+<%= render partial: 'twitter/profile', locals: {user: @twitter_user} %>
+
+<h2 class="h4 text-center my-5"><%= t('.content_title', user: @twitter_user.screen_name) %></h2>
+<div class="mb-5"><%= t('.content_title', user: @twitter_user.screen_name) %></div>
+
+<%= render(partial: 'adsense/ad', locals: {vertical: :middle}) %>
+
+<h2 class="h5 text-center my-5"><%= t('.step1_title') %></h2>
+<div class="mb-3"><%= t('.step1_description_html', user: @twitter_user.screen_name) %></div>
+
+<div id="friends-container" style="height: 300px; overflow-y:scroll;">
+  <%= t('.loading') %>
+  <%= image_tag('/ajax-loader-blue.gif?a=1') %>
+</div>
+
+<h2 class="h4 text-center my-5"><%= t('.step1_title') %></h2>
+<div class="mb-3"><%= t('.step1_description_html', user: @twitter_user.screen_name) %></div>
+
+<script>
+  $(function () {
+    var signedIn = <%= user_signed_in? %>;
+    var url = '<%= raw api_v1_secret_accounts_path(uid: @twitter_user.uid) %>';
+    var template = window.templates['userRectangle'];
+    var container = $('#friends-container');
+
+    $.get(url).done(function (res) {
+      console.log(res.friends);
+      container.empty();
+
+      res.friends.forEach(function (user) {
+        var rendered = Mustache.render(template, user)
+        container.append(rendered);
+      });
+    }).fail(function (xhr) {
+      console.warn(url, xhr.responseText);
+      container.empty();
+    });
+  });
+</script>
